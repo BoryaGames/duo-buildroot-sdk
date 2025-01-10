@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - arduino
 
 env:
   TZ: Asia/Shanghai
@@ -19,19 +20,15 @@ jobs:
     - name: Initialization environment
       run: |
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install -y pkg-config build-essential ninja-build automake autoconf libtool wget curl git gcc libssl-dev bc slib squashfs-tools android-sdk-libsparse-utils jq python3-distutils scons parallel tree python3-dev python3-pip device-tree-compiler ssh cpio fakeroot libncurses5 flex bison libncurses5-dev genext2fs rsync unzip dosfstools mtools tcl openssh-client cmake expect libconfuse2
+        sudo -E apt-get -qq install -y pkg-config build-essential ninja-build automake autoconf libtool wget curl git gcc libssl-dev bc squashfs-tools android-sdk-libsparse-utils jq scons parallel tree python3-dev python3-pip device-tree-compiler ssh cpio fakeroot flex bison libncurses5-dev genext2fs rsync unzip dosfstools mtools tcl openssh-client cmake expect libconfuse2
         sudo timedatectl set-timezone "$TZ"
-
-    - name: Initialization libssl1.1
-      run: |
-        if [ "$(dpkg -s libssl1.1 | grep 'Status:')" != "Status: install ok installed" ]; then wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb ; sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb ; fi
 
     - name: Run build.sh
       id: compile
       run: |
         echo $PWD
         echo $GITHUB_WORKSPACE
-        bash ./build.sh milkv-duo
+        bash ./build.sh milkv-duos-sd
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
